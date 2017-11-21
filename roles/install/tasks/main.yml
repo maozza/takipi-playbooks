@@ -24,6 +24,10 @@
   shell: "/var/tmp/takipi-setup.sh {{ opts }}"
   register: results
 
+- name: Remove temp script
+  file:
+    state: absent
+    path: /var/tmp/takipi-setup.sh
 
 - debug:
     msg: "Takipi installed successfully"
