@@ -1,0 +1,30 @@
+---
+
+- name: Verify secret exist
+  fail: msg="Variable secret is not defined use -e secret=SXXX"
+  when: secret is not defined
+
+- name: Download takipi setup scripts
+  get_url:
+    url: "{{ takipi.url }}"
+    dest: /var/tmp/takipi-setup.sh
+    mode: "755"
+
+- name: build command options
+  set_fact:
+   opts: "{{ opts | default('')}} --{{ item.key }} {{ item.value }}"
+  with_dict: "{{ options }}"
+  when: item.value
+
+- debug:
+    msg: "install command /var/tmp/takipi-setup.sh {{ opts }}"
+
+
+- name: Run Takipi Setup Package
+  shell: "/var/tmp/takipi-setup.sh {{ opts }}"
+  register: results
+
+
+- debug:
+    msg: "Takipi installed successfully"
+  when: ("Takipi installed successfully" in results.stdout)

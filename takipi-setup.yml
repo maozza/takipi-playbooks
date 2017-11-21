@@ -1,0 +1,8 @@
+- hosts: "{{ hosts | default('all') }}"
+  vars:
+    takipi:
+      SECRET_KEY: "{{ secret }}"
+      url: "http://get.takipi.com"
+  become: true
+  roles:
+    - install
